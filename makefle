@@ -1,0 +1,5 @@
+all:
+	gcc -c -fPIC -w function.c -o function.o
+	gcc -shared -o libfunction.so function.o
+	gcc -c -w longArith.c -o longArith.o
+	gcc longArith.o -L. -Wl,-rpath,. -lfunction -o longArith
