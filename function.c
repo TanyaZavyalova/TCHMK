@@ -409,7 +409,7 @@ unsigned char *mul(unsigned char **numberOne,unsigned char **numberTwo)
 
 unsigned char *mulb(unsigned char **numberOne,unsigned char **numberTwo,int lengthFirst,int lengthSecond,int *lengthSumm)
 {
-    unsigned char *result,*help;
+    unsigned char *result,*help,*helpresult;
     int i,j,carry,temp,resultlength,it;
     result = (unsigned char*)malloc(lengthFirst*lengthSecond+5);
     for (i=0;i<lengthFirst*lengthSecond+5;i++)
@@ -436,7 +436,11 @@ unsigned char *mulb(unsigned char **numberOne,unsigned char **numberTwo,int leng
 		{
             help[i+j] = carry;
 			if (i != 0)
-				result = summb(&result,&help,resultlength,i+j+1,&resultlength);
+			{
+				helpresult = summb(&result,&help,resultlength,i+j+1,&resultlength);
+				free(result);
+				result=helpresult;
+			}
 			else
 			{
 				for (it=0;it<i+j+1;it++)
@@ -447,7 +451,11 @@ unsigned char *mulb(unsigned char **numberOne,unsigned char **numberTwo,int leng
 		else
 		{
 			if (i != 0)
-				result = summb(&result,&help,resultlength,i+j,&resultlength);
+			{
+				helpresult = summb(&result,&help,resultlength,i+j,&resultlength);
+				free(result);
+				result=helpresult;
+			}
 			else
 			{
 				for (it=0;it<i+j;it++)
@@ -567,13 +575,40 @@ unsigned char *divv(unsigned char **numberOne,unsigned char **numberTwo,unsigned
 
 unsigned char *divvb(unsigned char **numberOne,unsigned char **numberTwo,int lengthFirst,int lengthSecond,int *lengthSumm,unsigned char **remainder,int *lengthOst)
 {
-	int i,j,k,q,lengthdivisor,c;
-	unsigned char *dividend,*divisor,*answer;
-	dividend = (unsigned char*)malloc(2*lengthFirst);
-	divisor = (unsigned char*)malloc(2*lengthSecond);
-	answer = (unsigned char*)malloc(2*lengthFirst);
+	int i,j,k,q,lengthdivisor,c,z=0;
+	unsigned char *dividend,*divisor,*answer,*helpdelitel;
+	dividend = (unsigned char*)malloc(lengthFirst);
+	divisor = (unsigned char*)malloc(lengthSecond+lengthSecond/2);
+	answer = (unsigned char*)malloc(lengthFirst);
 	q=0;
 	i=0;j=0;
+	while(1)
+	{
+	        if ((*numberTwo)[i] == 0)
+	        {
+	            answer[i]=0;
+	            z++;
+	            i++;
+	        }
+	        else break;
+	}
+	i=0;
+	while(1)
+	{
+	        if ((*numberOne)[i] == 0)
+	        {
+	            answer[i]=0;
+	            z++;
+	            i++;
+	        }
+	        else
+	        {
+	           answer[i]=0;
+	            z++;
+	           break;
+	        }
+	 }
+	 q=z;
 	while(1)
 	{
 		if (i == lengthFirst)
@@ -589,6 +624,8 @@ unsigned char *divvb(unsigned char **numberOne,unsigned char **numberTwo,int len
 				divisor[k]=(*numberTwo)[k];
 			lengthdivisor=k;
 			k=1;
+			if (lengthSecond != 1)
+				turnb(&(*numberTwo),lengthSecond);
 			while(1)
 			{
 				c=cmpb(&divisor,&dividend,lengthdivisor,j);
@@ -598,13 +635,15 @@ unsigned char *divvb(unsigned char **numberOne,unsigned char **numberTwo,int len
 					{
 						if (lengthdivisor != 1)
 							turnb(&divisor,lengthdivisor);
-						if (lengthSecond != 1)
-							turnb(&(*numberTwo),lengthSecond);
-						divisor = subb(&divisor,&(*numberTwo),lengthdivisor,lengthSecond,&lengthdivisor);
+						//if (lengthSecond != 1)
+							//turnb(&(*numberTwo),lengthSecond);
+						helpdivisor = subb(&divisor,&(*numberTwo),lengthdivisor,lengthSecond,&lengthdivisor);
+						free(divisor);
+						divisor=helpdivisor;
 						if (lengthdivisor != 1)
 							turnb(&divisor,lengthdivisor);
-						if (lengthSecond != 1)
-							turnb(&(*numberTwo),lengthSecond);
+						//if (lengthSecond != 1)
+							//turnb(&(*numberTwo),lengthSecond);
 						k--;
 					}
 					answer[q]=k;
@@ -615,16 +654,20 @@ unsigned char *divvb(unsigned char **numberOne,unsigned char **numberTwo,int len
 				{
 					if (lengthdivisor != 1)
 						turnb(&divisor,lengthdivisor);
-					if (lengthSecond != 1)
-						turnb(&(*numberTwo),lengthSecond);
-					divisor=summb(&divisor,&(*numberTwo),lengthdivisor,lengthSecond,&lengthdivisor);
+					//if (lengthSecond != 1)
+						//turnb(&(*numberTwo),lengthSecond);
+					helpdivisor=summb(&divisor,&(*numberTwo),lengthdivisor,lengthSecond,&lengthdivisor);
+					free(divisor);
+					divisor=helpdivisor;
 					if (lengthdivisor != 1)
 						turnb(&divisor,lengthdivisor);
-					if (lengthSecond != 1)
-						turnb(&(*numberTwo),lengthSecond);
+					//if (lengthSecond != 1)
+						//turnb(&(*numberTwo),lengthSecond);
 					k++;
 				}
 			}
+			if (lengthSecond != 1)
+				turnb(&(*numberTwo),lengthSecond);
 			if (j != 1)
 				turnb(&dividend,j);
 			if (lengthdivisor != 1)
