@@ -576,7 +576,7 @@ unsigned char *divv(unsigned char **numberOne,unsigned char **numberTwo,unsigned
 unsigned char *divvb(unsigned char **numberOne,unsigned char **numberTwo,int lengthFirst,int lengthSecond,int *lengthSumm,unsigned char **remainder,int *lengthOst)
 {
 	int i,j,k,q,lengthdivisor,c,z=0;
-	unsigned char *dividend,*divisor,*answer,*helpdelitel;
+	unsigned char *dividend,*divisor,*answer,*helpdivisor;
 	dividend = (unsigned char*)malloc(lengthFirst);
 	divisor = (unsigned char*)malloc(lengthSecond+lengthSecond/2);
 	answer = (unsigned char*)malloc(lengthFirst);
