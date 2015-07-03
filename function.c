@@ -683,7 +683,7 @@ unsigned char *divvb(unsigned char **numberOne,unsigned char **numberTwo,int len
 		}
 		else
 		{
-			if (q != 0)
+			if (q != z)
 			{
 				answer[q]=0;
 				q++;
