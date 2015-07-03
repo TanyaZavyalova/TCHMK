@@ -354,9 +354,9 @@ unsigned char *subb(unsigned char **numberOne,unsigned char **numberTwo,int leng
         }
         i++;
     }
-    //for (i=i-1;i>0;i--)
-       // if (result[i] != 0)
-         //   break;
+    for (i=i-1;i>0;i--)
+        if (result[i] != 0)
+            break;
     *lengthSumm = i+1;
     return result;
 }
@@ -411,11 +411,11 @@ unsigned char *mulb(unsigned char **numberOne,unsigned char **numberTwo,int leng
 {
     unsigned char *result,*help,*helpresult;
     int i,j,carry,temp,resultlength,it;
-    result = (unsigned char*)malloc(lengthFirst*lengthSecond+5);
-    for (i=0;i<lengthFirst*lengthSecond+5;i++)
+    result = (unsigned char*)malloc(lengthFirst*2+lengthSecond/2+5);
+    for (i=0;i<lengthFirst*2+lengthSecond/2+5;i++)
         result[i]=0;
     i=0;
-    help = (unsigned char*)malloc(lengthFirst*lengthSecond+5);
+    help = (unsigned char*)malloc(lengthFirst*2+lengthSecond/2+5);
     while (1)
     {
         if (i == lengthSecond)
